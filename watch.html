@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viral Link Hub - Watch</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0b0f19;
+      color: #f8fafc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .header {
+      width: 100%;
+      padding: 15px 20px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 800px;
+    }
+    .back-btn {
+      color: #38bdf8;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      padding: 15px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 70vh;
+    }
+    
+    /* Ad Overlay Modal (১৫ সেকেন্ড পর আসার জন্য) */
+    .ad-overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(11, 15, 25, 0.95);
+      z-index: 20;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+    }
+    .ad-overlay h3 {
+      color: #38bdf8;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    .ad-box {
+      width: 100%;
+      max-width: 300px;
+      min-height: 250px;
+      background: #1e293b;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      border: 1px dashed #475569;
+      padding: 10px;
+      overflow: hidden;
+    }
+    .resume-btn {
+      background: #22c55e;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .resume-btn:hover {
+      background: #16a34a;
+    }
+    .video-title {
+      margin-top: 15px;
+      font-size: 17px;
+      font-weight: 600;
+      color: #f1f5f9;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="index.html" class="back-btn">← হোমপেজে ফিরে যান</a>
+    <span style="font-weight: bold; color: #38bdf8;">Viral Link Hub</span>
+    <span></span>
+  </div>
+
+  <div class="container">
+    <div class="video-wrapper">
+      <!-- HTML5 Video Player -->
+      <video id="mainVideo" controls playsinline>
+        <source id="videoSource" src="" type="video/mp4">
+        আপনার ব্রাউজার ভিডিও ট্যাগ সাপোর্ট করে না।
+      </video>
+
+      <!-- Adsterra Ad Overlay Box -->
+      <div id="adModal" class="ad-overlay">
+        <h3>বিজ্ঞাপন শেষ হলে ভিডিও চালিয়ে যান</h3>
+        
+        <!-- Adsterra ব্যানার বা কোড এখানে বসবে -->
+        <div class="ad-box">
+          <!-- আপনার Adsterra থেকে পাওয়া ব্যানার বা সোশাল বার স্ক্রিপ্ট কোডটি ঠিক এই কমেন্টের নিচে পেস্ট করে দেবেন -->
+          
+          <p style="color: #94a3b8; font-size: 13px;">[ Adsterra Ad Unit Space ]</p>
+        </div>
+
+        <button class="resume-btn" onclick="resumeVideo()">ভিডিও চালিয়ে যান</button>
+      </div>
+    </div>
+
+    <div id="videoTitle" class="video-title">লোড হচ্ছে...</div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileId = urlParams.get('id');
+    const title = urlParams.get('title') || "স্ট্রিম করা ভিডিও";
+
+    document.getElementById('videoTitle').innerText = decodeURIComponent(title);
+
+    const video = document.getElementById('mainVideo');
+    const videoSource = document.getElementById('videoSource');
+    const adModal = document.getElementById('adModal');
+
+    // ** আপনার ক্লাউডফ্লায়ার ওয়ার্কারের আসল ডোমেইনটি এখানে বসিয়ে দিন (যেমন: https://my-proxy.workers.dev) **
+    const workerBaseUrl = "https://viralbd.ahyanarfinofficial.workers.dev";
+
+    if (fileId) {
+      videoSource.src = `${workerBaseUrl}/?id=${fileId}`;
+      video.load();
+    } else {
+      document.getElementById('videoTitle').innerText = "কোনো ভিডিও পাওয়া যায়নি!";
+    }
+
+    let adShown = false;
+
+    // ভিডিও ১৫ সেকেন্ড চলার পর পজ করে অ্যাড দেখানোর লজিক
+    video.addEventListener('timeupdate', function() {
+      if (Math.floor(video.currentTime) >= 15 && !adShown) {
+        video.pause();
+        adShown = true; 
+        adModal.style.display = 'flex';
+      }
+    });
+
+    function resumeVideo() {
+      adModal.style.display = 'none';
+      video.play();
+    }
+  </script>
+</body>
+</html>
