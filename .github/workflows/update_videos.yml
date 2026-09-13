@@ -2,13 +2,13 @@ name: Update Telegram Videos
 
 on:
   schedule:
-    # প্রতি ৬ ঘণ্টা পর পর রান করার জন্য ক্রন এক্সপ্রেশন (GitHub-এ প্রায় কাছাকাছি ইন্টারভেল এভাবে সেট করা হয়)
+    # প্রতি ৬ ঘণ্টা পর পর রান করার জন্য ক্রন এক্সপ্রেশন
     - cron: '0 */6 * * *'
   workflow_dispatch: # হাত দিয়ে ম্যানুয়ালি রান করার অপশন
 
 jobs:
   update-videos:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -38,3 +38,4 @@ jobs:
           git config --global user.email "actions@github.com"
           git add videos.json
           git diff --quiet && git diff --cached --quiet || (git commit -m "Auto-update videos.json" && git push)
+          
