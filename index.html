@@ -133,13 +133,13 @@
     <div class="section-title">সকল ভিডিও</div>
     
     <div class="video-grid" id="videoList">
-      <!-- পাইথন স্ক্রিপ্ট বা ব্যাকএন্ড থেকে এখানে ডাইনামিক ভিডিও লোড হবে -->
+      <!-- videos.json থেকে এখানে ডাইনামিক ভিডিও লোড হবে -->
       <p style="text-align: center; color: #94a3b8;">ভিডিও লোড হচ্ছে...</p>
     </div>
   </div>
 
   <script>
-    // গিটহাব বা সার্ভার থেকে videos.json ফেচ করে ভিডিও লিস্ট তৈরি করা
+    // গিটহাব থেকে videos.json ফেচ করে ভিডিও লিস্ট তৈরি করা
     fetch('videos.json')
       .then(response => {
         if (!response.ok) throw new Error("File not found");
@@ -173,7 +173,7 @@
       })
       .catch(err => {
         console.error("Error loading videos:", err);
-        document.getElementById('videoList').innerHTML = '<p style="text-align: center; color: #94a3b8;">এখনো কোনো ভিডিও সিঙ্ক করা হয়নি। পাইথন স্ক্রিপ্ট রান করুন!</p>';
+        document.getElementById('videoList').innerHTML = '<p style="text-align: center; color: #94a3b8;">এখনো কোনো ভিডিও যোগ করা হয়নি।</p>';
       });
 
     // সার্চ বা ফিল্টার করার লজিক
