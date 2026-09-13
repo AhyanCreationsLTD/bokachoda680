@@ -2,7 +2,6 @@ import os
 import json
 from pyrogram import Client
 
-# গিটহাব সিক্রেটস থেকে ক্রেডেনশিয়াল ফেচ করা
 API_ID = int(os.getenv("API_ID", "0"))
 API_HASH = os.getenv("API_HASH", "")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
@@ -12,6 +11,11 @@ app = Client("video_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
 async def main():
     async with app:
+        # চ্যানেল ক্যাশ বা পিয়ার রজল্ভ করার জন্য প্রথমে চ্যাট ইনফো ফেচ করা বাধ্যতামূলক
+        print("Connecting to channel...")
+        chat = await app.get_chat(CHAT_ID)
+        print(f"Successfully connected to: {chat.title}")
+
         videos = []
         # চ্যানেল থেকে সর্বশেষ ৫০টি মেসেজ চেক করা হচ্ছে
         async for message in app.get_chat_history(CHAT_ID, limit=50):
