@@ -159,11 +159,11 @@
     const videoSource = document.getElementById('videoSource');
     const adModal = document.getElementById('adModal');
 
-    // ** আপনার ক্লাউডফ্লায়ার ওয়ার্কারের আসল ডোমেইনটি এখানে বসিয়ে দিন (যেমন: https://my-proxy.workers.dev) **
+    // ** ক্লাউডফ্লায়ার ওয়ার্কারের লিংক (শেষের স্ল্যাশ বাদ দিয়ে রাখা হয়েছে) **
     const workerBaseUrl = "https://viralbd.ahyanarfinofficial.workers.dev";
 
     if (fileId) {
-      videoSource.src = `${workerBaseUrl}/?id=${fileId}`;
+      videoSource.src = `${workerBaseUrl}?id=${fileId}`;
       video.load();
     } else {
       document.getElementById('videoTitle').innerText = "কোনো ভিডিও পাওয়া যায়নি!";
