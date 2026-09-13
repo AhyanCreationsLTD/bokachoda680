@@ -8,23 +8,20 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 
 chat_id_env = os.getenv("CHAT_ID", "0")
 try:
+    # যদি -100 সহ সংখ্যা আইডি হয়
     CHAT_ID = int(chat_id_env)
 except ValueError:
+    # যদি চ্যানেলের ইউজারনেম হয় (যেমন: @mychannel)
     CHAT_ID = chat_id_env
 
 app = Client("video_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
 async def main():
     async with app:
-        print("Refreshing dialogs cache to locate channel...")
-        # বট যে যে চ্যানেলে আছে সেগুলোর ক্যাশ আপডেট করার জন্য ডায়ালগ লোড করা হচ্ছে
-        async for dialog in app.get_dialogs():
-            if dialog.chat.id == CHAT_ID:
-                print(f"Found target chat: {dialog.chat.title}")
-                break
-
         videos = []
         print(f"Fetching messages from chat: {CHAT_ID}")
+        
+        # সরাসরি চ্যানেল থেকে মেসেজ ফেচ করা (বটের জন্য এটি সম্পূর্ণ বৈধ)
         async for message in app.get_chat_history(CHAT_ID, limit=50):
             if message.video:
                 title = message.caption or f"ভিডিও - {message.video.file_name or message.id}"
